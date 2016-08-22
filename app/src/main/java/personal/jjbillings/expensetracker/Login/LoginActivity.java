@@ -9,21 +9,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import personal.jjbillings.expensetracker.MainActivity.MainActivity;
 import personal.jjbillings.expensetracker.R;
 
 public class LoginActivity extends AppCompatActivity implements LoginView{
 
-    private EditText usernameEditText,passwordEditText;
-    private Button btnLogin;
+    @BindView(R.id.usernameEditText) EditText usernameEditText;
+    @BindView(R.id.passwordEditText) EditText passwordEditText;
+    @BindView(R.id.btnLogin) Button btnLogin;
+
     private LoginPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
         initPresenter();
-        initComponents();
     }
 
     @Override
@@ -41,6 +46,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         Snackbar.make(btnLogin,"Please enter a username/password", Snackbar.LENGTH_SHORT).show();
     }
 
+    @OnClick(R.id.btnLogin)
+    protected void btnLoginOnClick() {
+        presenter.doLogin(usernameEditText.getText().toString().trim(),
+                passwordEditText.getText().toString().trim());
+    }
+
     @Override
     public void login() {
         Intent i = new Intent(this, MainActivity.class);
@@ -53,14 +64,4 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         presenter = new LoginPresenter(this);
     }
 
-    private void initComponents() {
-        usernameEditText = (EditText)findViewById(R.id.usernameEditText);
-        passwordEditText = (EditText)findViewById(R.id.passwordEditText);
-        btnLogin = (Button)findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener((View view) -> {
-            presenter.doLogin(usernameEditText.getText().toString().trim(),
-                    passwordEditText.getText().toString().trim());
-
-        });
-    }
 }
