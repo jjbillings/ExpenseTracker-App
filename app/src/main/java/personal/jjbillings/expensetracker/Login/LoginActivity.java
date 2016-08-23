@@ -2,16 +2,19 @@ package personal.jjbillings.expensetracker.Login;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import personal.jjbillings.expensetracker.ExpenseApplication;
+import personal.jjbillings.expensetracker.Helpers.DBHelper;
 import personal.jjbillings.expensetracker.MainActivity.MainActivity;
 import personal.jjbillings.expensetracker.R;
 
@@ -20,17 +23,34 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     @BindView(R.id.usernameEditText) EditText usernameEditText;
     @BindView(R.id.passwordEditText) EditText passwordEditText;
     @BindView(R.id.btnLogin) Button btnLogin;
+    @BindView(R.id.btnRegister) Button btnRegister;
 
     private LoginPresenter presenter;
 
+    @Inject DBHelper mDBHelper;
+
+    //Setup.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         initPresenter();
+
+        ExpenseApplication.getComponent().inject(this);
+
+        if(mDBHelper == null) {
+            usernameEditText.setText("INJECTION FAILED");
+        } else {
+            usernameEditText.setText("INJECTION SUCCESSFUL");
+        }
     }
 
+    private void initPresenter() {
+        presenter = new LoginPresenter(this);
+    }
+
+    //Methods called by Presenter
     @Override
     public void showErrorMessageForUserNamePassword() {
         Snackbar.make(passwordEditText,"Invalid username/password", Snackbar.LENGTH_SHORT).show();
@@ -46,10 +66,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         Snackbar.make(btnLogin,"Please enter a username/password", Snackbar.LENGTH_SHORT).show();
     }
 
-    @OnClick(R.id.btnLogin)
-    protected void btnLoginOnClick() {
-        presenter.doLogin(usernameEditText.getText().toString().trim(),
-                passwordEditText.getText().toString().trim());
+    @Override
+    public void showErrorIfUsernameTaken() {
+        Snackbar.make(btnRegister,"Apologies, that username has already been taken", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -60,8 +79,16 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         finish();
     }
 
-    private void initPresenter() {
-        presenter = new LoginPresenter(this);
+    //Button Listeners
+    @OnClick(R.id.btnLogin)
+    protected void btnLoginOnClick() {
+        presenter.doLogin(usernameEditText.getText().toString().trim(),
+                passwordEditText.getText().toString().trim());
     }
 
+    @OnClick(R.id.btnRegister)
+    protected void btnRegisterOnClick() {
+        presenter.doRegisterUser(usernameEditText.getText().toString().trim(),
+                passwordEditText.getText().toString().trim());
+    }
 }

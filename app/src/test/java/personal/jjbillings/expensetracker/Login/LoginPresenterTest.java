@@ -65,24 +65,28 @@ public class LoginPresenterTest {
     @Test
     public void checkIfUsernameFieldIsEmpty() {
         testPresenter.doLogin("","password");
+        Assert.assertFalse(testPresenter.isUsernamePasswordEmpty("","password"));
         verify(loginView).showErrorMessageForEmptyUserNamePassword();
     }
 
     @Test
     public void checkIfPasswordFieldIsEmpty() {
         testPresenter.doLogin("jbillz","");
+        Assert.assertFalse(testPresenter.isUsernamePasswordEmpty("jbillz",""));
         verify(loginView).showErrorMessageForEmptyUserNamePassword();
     }
 
     @Test
     public void checkIfUsernameFieldIsNull() {
         testPresenter.doLogin(null,"password");
+        Assert.assertFalse(testPresenter.isUsernamePasswordEmpty(null,"password"));
         verify(loginView).showErrorMessageForEmptyUserNamePassword();
     }
 
     @Test
     public void checkIfPasswordFieldIsNull() {
         testPresenter.doLogin("jbillz",null);
+        Assert.assertFalse(testPresenter.isUsernamePasswordEmpty("jbillz",null));
         verify(loginView).showErrorMessageForEmptyUserNamePassword();
     }
 }
