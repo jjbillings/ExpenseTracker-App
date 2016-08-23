@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import personal.jjbillings.expensetracker.Helpers.DBHelper;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -14,11 +16,14 @@ import static org.mockito.Mockito.verify;
 public class LoginPresenterTest {
 
     private LoginView loginView;
+    private DBHelper dbh;
     private LoginPresenter testPresenter;
+
     @Before
     public void setUp() throws Exception {
         loginView = mock(LoginView.class);
-        testPresenter = new LoginPresenter(loginView);
+        dbh = mock(DBHelper.class);
+        testPresenter = new LoginPresenter(loginView,dbh);
     }
 
     @After
