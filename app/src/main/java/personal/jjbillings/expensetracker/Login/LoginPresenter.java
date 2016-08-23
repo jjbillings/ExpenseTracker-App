@@ -3,6 +3,9 @@ package personal.jjbillings.expensetracker.Login;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import personal.jjbillings.expensetracker.ExpenseApplication;
 import personal.jjbillings.expensetracker.Helpers.DBHelper;
 
 /**
@@ -14,11 +17,12 @@ public class LoginPresenter {
     private int loginAttempt;
     private LoginView loginView;
     private List<String> usernames, passwords;
-    private DBHelper mDBHelper; //Need to inject DBHelper
+    private DBHelper mDBHelper;
 
 
-    public LoginPresenter(LoginView loginView) {
+    public LoginPresenter(LoginView loginView, DBHelper dbHelper) {
         this.loginView = loginView;
+        this.mDBHelper = dbHelper;
 
         usernames = new ArrayList<String>();
         passwords = new ArrayList<String>();

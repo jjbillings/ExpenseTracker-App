@@ -13,16 +13,16 @@ import personal.jjbillings.expensetracker.Dagger2.DatabaseModule;
 public class ExpenseApplication extends Application {
 
 
-    private static DatabaseComponent component;
+    private static DatabaseComponent dbComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        component = DaggerDatabaseComponent.builder().databaseModule(new DatabaseModule(this)).build();
+        dbComponent = DaggerDatabaseComponent.builder().databaseModule(new DatabaseModule(this)).build();
     }
 
-    public static DatabaseComponent getComponent() {
-        return component;
+    public static DatabaseComponent getDBComponent() {
+        return dbComponent;
     }
 
 }
