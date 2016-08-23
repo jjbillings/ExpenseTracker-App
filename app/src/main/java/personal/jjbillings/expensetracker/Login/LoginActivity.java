@@ -25,9 +25,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     @BindView(R.id.btnLogin) Button btnLogin;
     @BindView(R.id.btnRegister) Button btnRegister;
 
-    private LoginPresenter presenter;
-
     @Inject DBHelper mDBHelper;
+
+    private LoginPresenter presenter;
 
     //Setup.
     @Override
@@ -35,9 +35,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        ExpenseApplication.getDBComponent().inject(this);
         initPresenter();
-
-        ExpenseApplication.getComponent().inject(this);
 
         if(mDBHelper == null) {
             usernameEditText.setText("INJECTION FAILED");
@@ -47,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     }
 
     private void initPresenter() {
-        presenter = new LoginPresenter(this);
+        presenter = new LoginPresenter(this,mDBHelper);
     }
 
     //Methods called by Presenter
