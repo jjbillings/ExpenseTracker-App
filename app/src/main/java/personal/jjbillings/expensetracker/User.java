@@ -19,6 +19,24 @@ public class User {
         this.setId(id);
     }
 
+    @Override
+    public boolean equals(Object o) {
+
+        if(o == this) {
+            return true;
+        }
+
+        if(!(o instanceof User)) {
+            return false;
+        }
+
+        //TODO: Check more conditions?
+        if(((User)o).getUsername().equals(this.getUsername())) {
+            return true;
+        }
+
+        return false;
+    }
 
     public String getUsername() {
         return username;

@@ -44,9 +44,13 @@ public class LoginPresenterTest {
         Assert.assertFalse(testPresenter.isLoginAttemptExceeded());
     }
 
+    //TODO: This test always fails because we're not working with an actual DB, just a mock...
     @Test
     public void checkIfUsernameAndPasswordIsCorrect() {
-        testPresenter.doLogin("jbillz","password");
+        String un = "jbillz";
+        String pw = "password";
+        testPresenter.doRegisterUser(un,pw);
+        testPresenter.doLogin(un,pw);
         verify(loginView).login();
     }
 
@@ -60,6 +64,7 @@ public class LoginPresenterTest {
     public void checkIfLoginAttemptsIsExceededAndViewMethodCalled() {
         //LoginView loginView = mock(LoginView.class);
         //LoginPresenter testPresenter = new LoginPresenter(loginView);
+
         testPresenter.doLogin("j$","password");
         testPresenter.doLogin("j$","password");
         testPresenter.doLogin("j$","password");

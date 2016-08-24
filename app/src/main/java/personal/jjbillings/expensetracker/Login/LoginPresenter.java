@@ -60,8 +60,15 @@ public class LoginPresenter {
             return;
         }
 
-        //TODO: Check DB instead of arraylists.
-        if(usernames.contains(username) && passwords.contains(password)) {
+        User attemptingUser = new User(0,username,password);
+
+        if(!doesUserExist(attemptingUser)) {
+            loginView.showErrorMessageForUserNamePassword();
+            incrementLoginAttempt();
+            return;
+        }
+
+        if(usernamePasswordMatch(attemptingUser)) {
             loginView.login();
             return;
         }
@@ -71,28 +78,37 @@ public class LoginPresenter {
     }
 
     public void doRegisterUser(String username, String password) {
-        if(doesUserExist(username)) {
+
+        User newUser = new User(0,username,password);
+        if(doesUserExist(newUser)) {
             loginView.showErrorMessageIfUsernameTaken();
             return;
         }
 
-        User newUser = new User(0,username,password);
         mDBHelper.addUser(newUser);
         loginView.showConfirmationForRegistration();
     }
 
-    private boolean doesUserExist(String username) {
+    private boolean doesUserExist(User user) {
 
         if(mDBHelper.getUsersCount() < 1) {
             return false;
         }
 
-        User containedUser = mDBHelper.getUser(username);
-
-        if(containedUser == null) {
+        if(!mDBHelper.getAllUsers().contains(user)) {
             return false;
         }
 
         return true;
+    }
+
+    private boolean usernamePasswordMatch(User user) {
+        String password = mDBHelper.getPassword(user);
+
+        if(user.getPassword().equals(password)) {
+            return true;
+        }
+
+        return false;
     }
 }

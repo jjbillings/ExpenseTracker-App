@@ -132,4 +132,16 @@ public class DBHelper extends SQLiteOpenHelper {
         // return count
         return count;
     }
+
+    public String getPassword(User user) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_USERS, new String[] {KEY_PASS}, KEY_NAME + " = '"
+                + user.getUsername() + "'",null,null,null,null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        return cursor.getString(0);
+    }
 }
