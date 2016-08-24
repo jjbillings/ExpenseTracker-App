@@ -1,4 +1,4 @@
-package personal.jjbillings.expensetracker.Dagger2;
+package personal.jjbillings.expensetracker.Dagger2.Database;
 
 import android.app.Activity;
 import android.content.Context;

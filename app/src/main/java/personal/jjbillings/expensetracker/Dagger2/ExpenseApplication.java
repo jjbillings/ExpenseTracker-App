@@ -1,11 +1,11 @@
-package personal.jjbillings.expensetracker;
+package personal.jjbillings.expensetracker.Dagger2;
 
 import android.app.Application;
 
 
-import personal.jjbillings.expensetracker.Dagger2.DaggerDatabaseComponent;
-import personal.jjbillings.expensetracker.Dagger2.DatabaseComponent;
-import personal.jjbillings.expensetracker.Dagger2.DatabaseModule;
+import personal.jjbillings.expensetracker.Dagger2.Database.DaggerDatabaseComponent;
+import personal.jjbillings.expensetracker.Dagger2.Database.DatabaseComponent;
+import personal.jjbillings.expensetracker.Dagger2.Database.DatabaseModule;
 
 /**
  * Created by jbillz on 8/22/16.

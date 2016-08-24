@@ -1,12 +1,12 @@
 package personal.jjbillings.expensetracker.Login;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import personal.jjbillings.expensetracker.ExpenseApplication;
 import personal.jjbillings.expensetracker.Helpers.DBHelper;
+import personal.jjbillings.expensetracker.User;
 
 /**
  * Created by jbillz on 8/17/16.
@@ -60,6 +60,7 @@ public class LoginPresenter {
             return;
         }
 
+        //TODO: Check DB instead of arraylists.
         if(usernames.contains(username) && passwords.contains(password)) {
             loginView.login();
             return;
@@ -70,6 +71,28 @@ public class LoginPresenter {
     }
 
     public void doRegisterUser(String username, String password) {
+        if(doesUserExist(username)) {
+            loginView.showErrorMessageIfUsernameTaken();
+            return;
+        }
 
+        User newUser = new User(0,username,password);
+        mDBHelper.addUser(newUser);
+        loginView.showConfirmationForRegistration();
+    }
+
+    private boolean doesUserExist(String username) {
+
+        if(mDBHelper.getUsersCount() < 1) {
+            return false;
+        }
+
+        User containedUser = mDBHelper.getUser(username);
+
+        if(containedUser == null) {
+            return false;
+        }
+
+        return true;
     }
 }

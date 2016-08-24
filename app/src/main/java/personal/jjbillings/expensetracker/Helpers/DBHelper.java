@@ -20,7 +20,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_USERS = "users";
 
-    public static final String KEY_ID = "id";
     public static final String KEY_NAME = "name";
     public static final String KEY_PASS = "password";
 
@@ -31,8 +30,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         String createUserTable = "CREATE TABLE " + TABLE_USERS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_PASS + " TEXT" + ")";
+                + KEY_NAME + " TEXT PRIMARY KEY, "
+                + KEY_PASS + " TEXT" + ");";
         db.execSQL(createUserTable);
     }
 
@@ -48,8 +47,8 @@ public class DBHelper extends SQLiteOpenHelper {
      * All CRUD(Create, Read, Update, Delete) Operations
      */
 
-    // Adding new contact
-    void addContact(User user) {
+    // Adding new user
+    public void addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -61,25 +60,23 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
-    // Getting single contact
-    User getContact(int id) {
+    //TODO: What if the user DNE?
+    public User getUser(String uname) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_USERS, new String[] { KEY_ID,
-                        KEY_NAME, KEY_PASS }, KEY_ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
-        if (cursor != null)
+        Cursor cursor = db.query(TABLE_USERS, new String[] {KEY_NAME, KEY_PASS}, KEY_NAME + " = '"
+                + uname + "'",null,null,null,null);
+        if(cursor != null) {
             cursor.moveToFirst();
+        }
 
-        User user = new User(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2));
-        // return user
+        User user = new User(0,cursor.getString(0),cursor.getString(1));
         return user;
     }
 
     // Getting All Contacts
-    public List<User> getAllContacts() {
-        List<User> contactList = new ArrayList<User>();
+    public List<User> getAllUsers() {
+        List<User> userList = new ArrayList<User>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_USERS;
 
@@ -89,21 +86,21 @@ public class DBHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                User contact = new User();
-                contact.setId(Integer.parseInt(cursor.getString(0)));
-                contact.setUsername(cursor.getString(1));
-                contact.setPassword(cursor.getString(2));
-                // Adding contact to list
-                contactList.add(contact);
+                User user = new User();
+                user.setId(0);
+                user.setUsername(cursor.getString(0));
+                user.setPassword(cursor.getString(1));
+                // Adding user to list
+                userList.add(user);
             } while (cursor.moveToNext());
         }
 
-        // return contact list
-        return contactList;
+        // return User list
+        return userList;
     }
 
     // Updating single contact
-    public int updateContact(User user) {
+    public int updateUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -111,27 +108,28 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_PASS, user.getPassword());
 
         // updating row
-        return db.update(TABLE_USERS, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(user.getId()) });
+        return db.update(TABLE_USERS, values, KEY_NAME + " = ?",
+                new String[] { user.getUsername() });
     }
 
-    // Deleting single contact
-    public void deleteContact(User user) {
+    // Deleting single User
+    public void deleteUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_USERS, KEY_ID + " = ?",
-                new String[] { String.valueOf(user.getId()) });
+        db.delete(TABLE_USERS, KEY_NAME + " = ?",
+                new String[] { user.getUsername() });
         db.close();
     }
 
 
-    // Getting contacts Count
-    public int getContactsCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_USERS;
+    // Getting User Count
+    public int getUsersCount() {
+        String countQuery = "SELECT * FROM " + TABLE_USERS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
         cursor.close();
 
         // return count
-        return cursor.getCount();
+        return count;
     }
 }

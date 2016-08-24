@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
-import personal.jjbillings.expensetracker.ExpenseApplication;
+import personal.jjbillings.expensetracker.Dagger2.ExpenseApplication;
 import personal.jjbillings.expensetracker.Helpers.DBHelper;
 import personal.jjbillings.expensetracker.R;
 

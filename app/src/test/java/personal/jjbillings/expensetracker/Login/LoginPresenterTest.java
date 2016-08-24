@@ -94,4 +94,10 @@ public class LoginPresenterTest {
         Assert.assertFalse(testPresenter.isUsernamePasswordEmpty("jbillz",null));
         verify(loginView).showErrorMessageForEmptyUserNamePassword();
     }
+
+    @Test
+    public void checkIfRegistrationHappens() {
+        testPresenter.doRegisterUser("newuser","newpassword");
+        verify(loginView).showConfirmationForRegistration();
+    }
 }

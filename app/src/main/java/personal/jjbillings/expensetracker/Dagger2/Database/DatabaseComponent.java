@@ -1,9 +1,8 @@
-package personal.jjbillings.expensetracker.Dagger2;
+package personal.jjbillings.expensetracker.Dagger2.Database;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
-import personal.jjbillings.expensetracker.Helpers.DBHelper;
 import personal.jjbillings.expensetracker.Login.LoginActivity;
 import personal.jjbillings.expensetracker.MainActivity.MainActivity;
 

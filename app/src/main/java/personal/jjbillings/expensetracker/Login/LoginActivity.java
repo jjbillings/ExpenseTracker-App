@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import personal.jjbillings.expensetracker.ExpenseApplication;
+import personal.jjbillings.expensetracker.Dagger2.ExpenseApplication;
 import personal.jjbillings.expensetracker.Helpers.DBHelper;
 import personal.jjbillings.expensetracker.MainActivity.MainActivity;
 import personal.jjbillings.expensetracker.R;
@@ -66,8 +66,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     }
 
     @Override
-    public void showErrorIfUsernameTaken() {
+    public void showErrorMessageIfUsernameTaken() {
         Snackbar.make(btnRegister,"Apologies, that username has already been taken", Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showConfirmationForRegistration() {
+        Snackbar.make(btnRegister,"Congratulations, you have been registered!", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

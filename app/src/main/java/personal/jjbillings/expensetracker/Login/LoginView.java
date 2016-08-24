@@ -11,7 +11,9 @@ public interface LoginView {
 
     void showErrorMessageForEmptyUserNamePassword();
 
-    void showErrorIfUsernameTaken();
+    void showErrorMessageIfUsernameTaken();
+
+    void showConfirmationForRegistration();
 
     void login();
 }
