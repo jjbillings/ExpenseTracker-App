@@ -43,6 +43,23 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public boolean doesTableExist(String tableName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String tableQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName +"';";
+        Cursor cursor = db.rawQuery(tableQuery,null);
+
+        if(cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        if(cursor.getCount() == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * All CRUD(Create, Read, Update, Delete) Operations
      */
@@ -99,12 +116,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    // Updating single contact
+    // Updating single user
     public int updateUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, user.getUsername());
         values.put(KEY_PASS, user.getPassword());
 
         // updating row
