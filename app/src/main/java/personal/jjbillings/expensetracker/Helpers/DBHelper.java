@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import personal.jjbillings.expensetracker.User;
+import personal.jjbillings.expensetracker.Models.User;
 
 /**
  * Created by jbillz on 8/22/16.
@@ -87,7 +87,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
         }
 
-        User user = new User(0,cursor.getString(0),cursor.getString(1));
+        User user = new User(cursor.getString(0),cursor.getString(1));
         return user;
     }
 
@@ -104,7 +104,6 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 User user = new User();
-                user.setId(0);
                 user.setUsername(cursor.getString(0));
                 user.setPassword(cursor.getString(1));
                 // Adding user to list

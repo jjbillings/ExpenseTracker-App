@@ -9,11 +9,10 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
 import org.robolectric.shadows.ShadowApplication;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import personal.jjbillings.expensetracker.User;
+import personal.jjbillings.expensetracker.Models.User;
 
 import static org.junit.Assert.*;
 
@@ -50,7 +49,7 @@ public class DBHelperTest {
 
     @Test
     public void checkIfAddUserCorrectly() {
-        User testUser = new User(0,"jbillz","password");
+        User testUser = new User("jbillz","password");
         dbh.addUser(testUser);
         assertEquals(1,dbh.getUsersCount());
         assertEquals(testUser,dbh.getUser(testUser.getUsername()));
@@ -63,7 +62,7 @@ public class DBHelperTest {
         String pass1 = "password";
         String pass2 = "newpassword";
 
-        User testUser = new User(0,uname1,pass1);
+        User testUser = new User(uname1,pass1);
         dbh.addUser(testUser);
 
         testUser.setPassword(pass2);
@@ -79,7 +78,7 @@ public class DBHelperTest {
     public void checkIfDeleteUserCorrectly() {
         String uname = "jdollar";
         String pass = "password";
-        User testUser = new User(0,uname,pass);
+        User testUser = new User(uname,pass);
         dbh.addUser(testUser);
 
         assertEquals(1,dbh.getUsersCount());
@@ -92,8 +91,8 @@ public class DBHelperTest {
     @Test
     public void checkIfGetAllUsersCorrectly() {
         List<User> testUsers = new ArrayList<>();
-        User u1 = new User(0,"jbillz","pass1");
-        User u2 = new User(1,"jdollar","pass2");
+        User u1 = new User("jbillz","pass1");
+        User u2 = new User("jdollar","pass2");
         testUsers.add(u1);
         testUsers.add(u2);
 
@@ -108,7 +107,7 @@ public class DBHelperTest {
 
     @Test
     public void checkNotDoubleAddingUsers() {
-        User testUser = new User(0,"jbillz","password");
+        User testUser = new User("jbillz","password");
 
         dbh.addUser(testUser);
         dbh.addUser(testUser);

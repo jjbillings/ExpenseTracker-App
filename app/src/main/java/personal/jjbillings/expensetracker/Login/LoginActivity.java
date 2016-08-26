@@ -38,11 +38,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         ExpenseApplication.getDBComponent().inject(this);
         initPresenter();
 
-        if(mDBHelper == null) {
-            usernameEditText.setText("INJECTION FAILED");
-        } else {
-            usernameEditText.setText("INJECTION SUCCESSFUL");
-        }
+        usernameEditText.setText("jbillz");
+        passwordEditText.setText("password");
     }
 
     private void initPresenter() {

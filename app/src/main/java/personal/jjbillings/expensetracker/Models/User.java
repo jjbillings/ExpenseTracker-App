@@ -1,4 +1,4 @@
-package personal.jjbillings.expensetracker;
+package personal.jjbillings.expensetracker.Models;
 
 /**
  * Created by jbillz on 8/22/16.
@@ -7,16 +7,14 @@ public class User {
 
     private String username;
     private String password;
-    private int id;
 
     public User() {
 
     }
 
-    public User(int id, String username, String password) {
+    public User(String username, String password) {
         this.setUsername(username);
         this.setPassword(password);
-        this.setId(id);
     }
 
     @Override
@@ -54,11 +52,4 @@ public class User {
         this.password = password;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 }

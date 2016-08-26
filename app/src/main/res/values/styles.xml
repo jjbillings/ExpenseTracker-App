@@ -6,6 +6,22 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorSecondary">@color/colorTextSecondary</item>
+
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!--Toolbar Style-->
+    <!--TODO:Verify that there are no weird things that pop up with customizing the toolbar theme -->
+    <style name="ToolbarStyle" parent="Base.ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/colorToolbarTextPrimary</item>
+
+        <!-- Secondary text might cause problems later on -->
+        <item name="android:textColorSecondary">@color/colorTextSecondary</item>
+        <item name="android:actionMenuTextColor">@color/colorIcons</item>
     </style>
 
 </resources>

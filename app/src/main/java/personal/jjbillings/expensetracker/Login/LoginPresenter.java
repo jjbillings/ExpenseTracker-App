@@ -1,12 +1,7 @@
 package personal.jjbillings.expensetracker.Login;
 
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import personal.jjbillings.expensetracker.Helpers.DBHelper;
-import personal.jjbillings.expensetracker.User;
+import personal.jjbillings.expensetracker.Models.User;
 
 /**
  * Created by jbillz on 8/17/16.
@@ -15,20 +10,14 @@ public class LoginPresenter {
 
     private static final int MAX_LOGIN_ATTEMPT = 3;
     private int loginAttempt;
+
     private LoginView loginView;
-    private List<String> usernames, passwords;
     private DBHelper mDBHelper;
 
 
     public LoginPresenter(LoginView loginView, DBHelper dbHelper) {
         this.loginView = loginView;
         this.mDBHelper = dbHelper;
-
-        usernames = new ArrayList<String>();
-        passwords = new ArrayList<String>();
-
-        usernames.add("jbillz");
-        passwords.add("password");
 
         loginAttempt = 0;
     }
@@ -60,7 +49,7 @@ public class LoginPresenter {
             return;
         }
 
-        User attemptingUser = new User(0,username,password);
+        User attemptingUser = new User(username,password);
 
         if(!doesUserExist(attemptingUser)) {
             loginView.showErrorMessageForUserNamePassword();
@@ -79,7 +68,7 @@ public class LoginPresenter {
 
     public void doRegisterUser(String username, String password) {
 
-        User newUser = new User(0,username,password);
+        User newUser = new User(username,password);
         if(doesUserExist(newUser)) {
             loginView.showErrorMessageIfUsernameTaken();
             return;
