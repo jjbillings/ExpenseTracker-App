@@ -15,20 +15,26 @@ import static org.mockito.Mockito.verify;
  */
 public class LoginPresenterTest {
 
-    private LoginView loginView;
+    //private LoginView loginView;
     private DBHelper dbh;
     private LoginPresenter testPresenter;
 
     @Before
     public void setUp() throws Exception {
-        loginView = mock(LoginView.class);
+        //loginView = mock(LoginView.class);
         dbh = mock(DBHelper.class);
-        testPresenter = new LoginPresenter(loginView,dbh);
+        testPresenter = new LoginPresenter(dbh);
+        testPresenter.bindView(mock(LoginView.class));
     }
 
     @After
     public void tearDown() throws Exception {
+        testPresenter.unbindView();
+    }
 
+    @Test
+    public void checkIfViewIsBound() {
+        Assert.assertTrue(testPresenter.isViewAttached());
     }
 
     @Test
@@ -51,13 +57,13 @@ public class LoginPresenterTest {
         String pw = "password";
         testPresenter.doRegisterUser(un,pw);
         testPresenter.doLogin(un,pw);
-        verify(loginView).login();
+        verify(testPresenter.getView()).login();
     }
 
     @Test
     public void checkIfUsernameAndPasswordIsIncorrect() {
         testPresenter.doLogin("j$","password");
-        verify(loginView).showErrorMessageForUserNamePassword();
+        verify(testPresenter.getView()).showErrorMessageForUserNamePassword();
     }
 
     @Test
@@ -69,40 +75,40 @@ public class LoginPresenterTest {
         testPresenter.doLogin("j$","password");
         testPresenter.doLogin("j$","password");
         testPresenter.doLogin("j$","password");
-        verify(loginView).showErrorMessageForMaxLoginAttempts();
+        verify(testPresenter.getView()).showErrorMessageForMaxLoginAttempts();
     }
 
     @Test
     public void checkIfUsernameFieldIsEmpty() {
         testPresenter.doLogin("","password");
         Assert.assertFalse(testPresenter.isUsernamePasswordEmpty("","password"));
-        verify(loginView).showErrorMessageForEmptyUserNamePassword();
+        verify(testPresenter.getView()).showErrorMessageForEmptyUserNamePassword();
     }
 
     @Test
     public void checkIfPasswordFieldIsEmpty() {
         testPresenter.doLogin("jbillz","");
         Assert.assertFalse(testPresenter.isUsernamePasswordEmpty("jbillz",""));
-        verify(loginView).showErrorMessageForEmptyUserNamePassword();
+        verify(testPresenter.getView()).showErrorMessageForEmptyUserNamePassword();
     }
 
     @Test
     public void checkIfUsernameFieldIsNull() {
         testPresenter.doLogin(null,"password");
         Assert.assertFalse(testPresenter.isUsernamePasswordEmpty(null,"password"));
-        verify(loginView).showErrorMessageForEmptyUserNamePassword();
+        verify(testPresenter.getView()).showErrorMessageForEmptyUserNamePassword();
     }
 
     @Test
     public void checkIfPasswordFieldIsNull() {
         testPresenter.doLogin("jbillz",null);
         Assert.assertFalse(testPresenter.isUsernamePasswordEmpty("jbillz",null));
-        verify(loginView).showErrorMessageForEmptyUserNamePassword();
+        verify(testPresenter.getView()).showErrorMessageForEmptyUserNamePassword();
     }
 
     @Test
     public void checkIfRegistrationHappens() {
         testPresenter.doRegisterUser("newuser","newpassword");
-        verify(loginView).showConfirmationForRegistration();
+        verify(testPresenter.getView()).showConfirmationForRegistration();
     }
 }

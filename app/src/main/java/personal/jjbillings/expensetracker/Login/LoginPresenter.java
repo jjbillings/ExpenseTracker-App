@@ -1,24 +1,26 @@
 package personal.jjbillings.expensetracker.Login;
 
+import android.util.Log;
+
+import personal.jjbillings.expensetracker.BasePresenter;
 import personal.jjbillings.expensetracker.Helpers.DBHelper;
 import personal.jjbillings.expensetracker.Models.User;
 
 /**
+ * TODO: Add checks to ensure view is still bound before calling "getView()"
  * Created by jbillz on 8/17/16.
  */
-public class LoginPresenter {
+public class LoginPresenter extends BasePresenter<LoginView>{
 
     private static final int MAX_LOGIN_ATTEMPT = 3;
     private int loginAttempt;
 
-    private LoginView loginView;
+    //private LoginView loginView;
     private DBHelper mDBHelper;
 
 
-    public LoginPresenter(LoginView loginView, DBHelper dbHelper) {
-        this.loginView = loginView;
+    public LoginPresenter(DBHelper dbHelper) {
         this.mDBHelper = dbHelper;
-
         loginAttempt = 0;
     }
 
@@ -39,43 +41,44 @@ public class LoginPresenter {
     }
 
     public void doLogin(String username, String password) {
+
         if(isLoginAttemptExceeded()) {
-            loginView.showErrorMessageForMaxLoginAttempts();
+            getView().showErrorMessageForMaxLoginAttempts();
             return;
         }
 
         if(!isUsernamePasswordEmpty(username,password)) {
-            loginView.showErrorMessageForEmptyUserNamePassword();
+            getView().showErrorMessageForEmptyUserNamePassword();
             return;
         }
 
         User attemptingUser = new User(username,password);
 
         if(!doesUserExist(attemptingUser)) {
-            loginView.showErrorMessageForUserNamePassword();
+            getView().showErrorMessageForUserNamePassword();
             incrementLoginAttempt();
             return;
         }
 
         if(usernamePasswordMatch(attemptingUser)) {
-            loginView.login();
+            getView().login();
             return;
         }
 
         incrementLoginAttempt();
-        loginView.showErrorMessageForUserNamePassword();
+        getView().showErrorMessageForUserNamePassword();
     }
 
     public void doRegisterUser(String username, String password) {
 
         User newUser = new User(username,password);
         if(doesUserExist(newUser)) {
-            loginView.showErrorMessageIfUsernameTaken();
+            getView().showErrorMessageIfUsernameTaken();
             return;
         }
 
         mDBHelper.addUser(newUser);
-        loginView.showConfirmationForRegistration();
+        getView().showConfirmationForRegistration();
     }
 
     private boolean doesUserExist(User user) {

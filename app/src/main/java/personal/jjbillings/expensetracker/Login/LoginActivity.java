@@ -29,12 +29,15 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
 
     private LoginPresenter presenter;
 
+    //TODO: Add Lifecycle management for handling the viewbinding for the presenter.
     //Setup.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        //inject the database.
         ExpenseApplication.getDBComponent().inject(this);
         initPresenter();
 
@@ -42,8 +45,15 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         passwordEditText.setText("password");
     }
 
+    @Override
+    protected void onDestroy() {
+        presenter.unbindView();
+        super.onDestroy();
+    }
+
     private void initPresenter() {
-        presenter = new LoginPresenter(this,mDBHelper);
+        presenter = new LoginPresenter(mDBHelper);
+        presenter.bindView(this);
     }
 
     //Methods called by Presenter

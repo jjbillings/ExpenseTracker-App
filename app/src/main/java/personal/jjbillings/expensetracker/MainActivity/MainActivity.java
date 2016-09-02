@@ -37,8 +37,15 @@ public class MainActivity extends AppCompatActivity implements MainView{
         initToolbar();
     }
 
+    @Override
+    protected void onDestroy() {
+        presenter.unbindView();
+        super.onDestroy();
+    }
+
     public void initPresenter() {
-        presenter = new MainPresenter(this,mDBHelper);
+        presenter = new MainPresenter(mDBHelper);
+        presenter.bindView(this);
     }
 
     public void initComponents() {

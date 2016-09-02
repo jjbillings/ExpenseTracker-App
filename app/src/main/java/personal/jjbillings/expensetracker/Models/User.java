@@ -1,5 +1,7 @@
 package personal.jjbillings.expensetracker.Models;
 
+import java.util.List;
+
 /**
  * Created by jbillz on 8/22/16.
  */
@@ -7,6 +9,7 @@ public class User {
 
     private String username;
     private String password;
+    private List<Expense> expenses;
 
     public User() {
 
@@ -15,6 +18,12 @@ public class User {
     public User(String username, String password) {
         this.setUsername(username);
         this.setPassword(password);
+    }
+
+    public User(String username, String password, List<Expense> expenses) {
+        this.setUsername(username);
+        this.setPassword(password);
+        this.setExpenses(expenses);
     }
 
     @Override
@@ -52,4 +61,11 @@ public class User {
         this.password = password;
     }
 
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
+    }
 }
