@@ -21,7 +21,7 @@ public class LoginPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-        //loginView = mock(LoginView.class);
+        //TODO: Instead of mocking, actually instantiate a db?
         dbh = mock(DBHelper.class);
         testPresenter = new LoginPresenter(dbh);
         testPresenter.bindView(mock(LoginView.class));

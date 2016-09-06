@@ -19,9 +19,56 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Expense_DB";
 
     public static final String TABLE_USERS = "users";
+    public static final String TABLE_REPORTS = "reports";
+    public static final String TABLE_RECEIPT_IMAGES = "receipt_images";
+    public static final String TABLE_PAYMENT_METHODS = "payment_methods";
+    public static final String TABLE_PAYMENT_TYPES = "payment_types";
+    public static final String TABLE_EXPENSES = "expenses";
+    public static final String TABLE_EXPENSE_CATEGORIES = "expense_categories";
 
+    //Link Tables
+    public static final String TABLE_REPORT_EXPENSE_LINKS = "report_expense_links";
+    public static final String TABLE_RECEIPT_EXPENSE_LINKS = "receipt_expense_links";
+    public static final String TABLE_EXPENSE_METHOD_LINKS = "expense_method_links";
+    public static final String TABLE_PAYMENT_TYPE_METHOD_LINKS = "payment_type_method_links";
+    public static final String TABLE_EXPENSE_CATEGORY_LINKS = "expense_category_links";
+
+
+    //All tables
     public static final String KEY_NAME = "name";
+    public static final String KEY_DESCRIPTION = "description";
+
+    //user table
+    public static final String KEY_USER_ID = "user_id";
     public static final String KEY_PASS = "password";
+
+    //reports table
+    public static final String KEY_REPORT_ID = "report_id";
+    public static final String KEY_REPORT_TIME_CREATED = "time_created";
+    public static final String KEY_REPORT_TIME_STARTED = "time_started";
+    public static final String KEY_REPORT_TIME_ENDED = "time_ended";
+    public static final String KEY_TOTAL_SPENT = "total_spent";
+    public static final String KEY_AVG_SPENT = "avg_spent";
+
+    //payment methods table
+    public static final String KEY_METHOD_ID = "method_id";
+
+    //Expenses table
+    public static final String KEY_EXPENSE_ID = "expense_id";
+    public static final String KEY_DATE = "date";
+
+    ////payment types table
+    public static final String KEY_PAYMENT_TYPE_ID = "payment_type_id";
+
+    //Receipt image table
+    public static final String KEY_RECEIPT_ID = "receipt_id";
+    public static final String KEY_PATH = "path";
+    public static final String KEY_FILENAME = "filename";
+
+    //Expense Categories table
+    public static final String KEY_CATEGORY_ID = "category_id";
+    public static final String KEY_CATEGORY_PARENT_ID = "category_parent_id";
+
 
 
     public DBHelper(Context context){
@@ -32,7 +79,20 @@ public class DBHelper extends SQLiteOpenHelper {
         String createUserTable = "CREATE TABLE " + TABLE_USERS + "("
                 + KEY_NAME + " TEXT PRIMARY KEY, "
                 + KEY_PASS + " TEXT" + ");";
+
+        String createReportsTable = "CREATE TABLE " + TABLE_REPORTS + "("
+                + KEY_REPORT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_USER_ID + " INTEGER, "
+                + KEY_NAME + " TEXT, "
+                + KEY_DESCRIPTION + " TEXT, "
+                + KEY_REPORT_TIME_CREATED + " TEXT, "
+                + KEY_REPORT_TIME_STARTED + " TEXT, "
+                + KEY_REPORT_TIME_ENDED + " TEXT, "
+                + KEY_TOTAL_SPENT + " REAL, "
+                + KEY_AVG_SPENT + " REAL, FOREIGN KEY(" + KEY_USER_ID + ") REFERENCES "
+                + TABLE_USERS + "("+KEY_USER_ID+"));";
         db.execSQL(createUserTable);
+        db.execSQL(createReportsTable);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -91,7 +151,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return user;
     }
 
-    // Getting All Contacts
+    // Getting All Users
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<User>();
         // Select All Query

@@ -45,6 +45,19 @@ public class DBHelperTest {
     @Test
     public void checkIfTablesAreCreated() {
         assertTrue(dbh.doesTableExist(dbh.TABLE_USERS));
+        assertTrue(dbh.doesTableExist(dbh.TABLE_REPORTS));
+
+        assertTrue(dbh.doesTableExist(dbh.TABLE_RECEIPT_IMAGES));
+        assertTrue(dbh.doesTableExist(dbh.TABLE_PAYMENT_METHODS));
+        assertTrue(dbh.doesTableExist(dbh.TABLE_PAYMENT_TYPES));
+        assertTrue(dbh.doesTableExist(dbh.TABLE_EXPENSES));
+        assertTrue(dbh.doesTableExist(dbh.TABLE_EXPENSE_CATEGORIES));
+
+        assertTrue(dbh.doesTableExist(dbh.TABLE_REPORT_EXPENSE_LINKS));
+        assertTrue(dbh.doesTableExist(dbh.TABLE_RECEIPT_EXPENSE_LINKS));
+        assertTrue(dbh.doesTableExist(dbh.TABLE_EXPENSE_METHOD_LINKS));
+        assertTrue(dbh.doesTableExist(dbh.TABLE_PAYMENT_TYPE_METHOD_LINKS));
+        assertTrue(dbh.doesTableExist(dbh.TABLE_EXPENSE_CATEGORY_LINKS));
     }
 
     @Test

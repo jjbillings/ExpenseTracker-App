@@ -10,6 +10,7 @@ public class User {
     private String username;
     private String password;
     private List<Expense> expenses;
+    private List<PaymentMethod> paymentMethods;
 
     public User() {
 
@@ -20,10 +21,11 @@ public class User {
         this.setPassword(password);
     }
 
-    public User(String username, String password, List<Expense> expenses) {
-        this.setUsername(username);
-        this.setPassword(password);
-        this.setExpenses(expenses);
+    public User(String username, String password, List<Expense> expenses, List<PaymentMethod> paymentMethods) {
+        this.username = username;
+        this.password = password;
+        this.expenses = expenses;
+        this.paymentMethods = paymentMethods;
     }
 
     @Override
@@ -67,5 +69,13 @@ public class User {
 
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
+    }
+
+    public List<PaymentMethod> getPaymentMethods() {
+        return paymentMethods;
+    }
+
+    public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
+        this.paymentMethods = paymentMethods;
     }
 }
