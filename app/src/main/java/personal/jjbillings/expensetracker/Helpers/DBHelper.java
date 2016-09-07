@@ -78,7 +78,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String createUserTable = "CREATE TABLE " + TABLE_USERS + "("
                 + KEY_NAME + " TEXT PRIMARY KEY, "
-                + KEY_PASS + " TEXT" + ");";
+                + KEY_PASS + " TEXT);";
 
         String createReportsTable = "CREATE TABLE " + TABLE_REPORTS + "("
                 + KEY_REPORT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -91,8 +91,67 @@ public class DBHelper extends SQLiteOpenHelper {
                 + KEY_TOTAL_SPENT + " REAL, "
                 + KEY_AVG_SPENT + " REAL, FOREIGN KEY(" + KEY_USER_ID + ") REFERENCES "
                 + TABLE_USERS + "("+KEY_USER_ID+"));";
+
+        String createReceiptImagesTable = "CREATE TABLE " + TABLE_RECEIPT_IMAGES + "("
+                + KEY_RECEIPT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_PATH + " TEXT, " + KEY_FILENAME + " TEXT);";
+
+        String createPaymentTypesTable = "CREATE TABLE " + TABLE_PAYMENT_TYPES + "("
+                + KEY_PAYMENT_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_NAME + " TEXT);";
+
+        String createExpensesTable = "CREATE TABLE " + TABLE_EXPENSES + "("
+                + KEY_EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_USER_ID + " INTEGER, " + KEY_NAME + " TEXT, "
+                + KEY_DESCRIPTION + " TEXT, " + KEY_DATE + " TEXT, "
+                + "FOREIGN KEY("+KEY_USER_ID+") REFERENCES " + TABLE_USERS + "("+KEY_USER_ID+"));";
+
+        String createPaymentMethodsTable = "CREATE TABLE " + TABLE_PAYMENT_METHODS + "("
+                + KEY_METHOD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_NAME + " TEXT, " + KEY_DESCRIPTION + " TEXT);";
+
+        String createExpenseCategoriesTable = "CREATE TABLE " + TABLE_EXPENSE_CATEGORIES + "("
+                + KEY_CATEGORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_NAME + " TEXT, " + KEY_CATEGORY_PARENT_ID + " INTEGER);";
+
+        String createReceiptExpenseLinksTable = "CREATE TABLE " + TABLE_RECEIPT_EXPENSE_LINKS + "("
+                + KEY_RECEIPT_ID + " INTEGER, " + KEY_EXPENSE_ID + " INTEGER, "
+                + "FOREIGN KEY("+KEY_RECEIPT_ID+") REFERENCES " + TABLE_RECEIPT_IMAGES +"("+KEY_RECEIPT_ID+"), "
+                + "FOREIGN KEY("+KEY_EXPENSE_ID+") REFERENCES " + TABLE_EXPENSES +"("+KEY_EXPENSE_ID+"));";
+
+        String createExpenseCategoryLinksTable = "CREATE TABLE " + TABLE_EXPENSE_CATEGORY_LINKS + "("
+                + KEY_EXPENSE_ID + " INTEGER, " + KEY_CATEGORY_ID + " INTEGER, "
+                + "FOREIGN KEY("+KEY_EXPENSE_ID+") REFERENCES " + TABLE_EXPENSES +"("+KEY_EXPENSE_ID+"), "
+                + "FOREIGN KEY("+KEY_CATEGORY_ID+") REFERENCES " + TABLE_EXPENSE_CATEGORIES +"("+KEY_CATEGORY_ID+"));";
+
+        String createReportExpenseLinks = "CREATE TABLE " + TABLE_REPORT_EXPENSE_LINKS + "("
+                + KEY_EXPENSE_ID + " INTEGER, " + KEY_REPORT_ID + " INTEGER, "
+                + "FOREIGN KEY("+KEY_EXPENSE_ID+") REFERENCES " + TABLE_EXPENSES +"("+KEY_EXPENSE_ID+"), "
+                + "FOREIGN KEY("+KEY_REPORT_ID+") REFERENCES " + TABLE_REPORTS +"("+KEY_REPORT_ID+"));";
+
+        String createPaymentTypeMethodLinks = "CREATE TABLE " + TABLE_PAYMENT_TYPE_METHOD_LINKS + "("
+                + KEY_PAYMENT_TYPE_ID + " INTEGER, " + KEY_METHOD_ID + " INTEGER, "
+                + "FOREIGN KEY("+KEY_PAYMENT_TYPE_ID+") REFERENCES " + TABLE_PAYMENT_TYPES +"("+KEY_PAYMENT_TYPE_ID+"), "
+                + "FOREIGN KEY("+KEY_METHOD_ID+") REFERENCES " + TABLE_PAYMENT_METHODS +"("+KEY_METHOD_ID+"));";
+
+        String createExpenseMethodsLinksTable = "CREATE TABLE " + TABLE_EXPENSE_METHOD_LINKS + "("
+                + KEY_EXPENSE_ID + " INTEGER, " + KEY_METHOD_ID + " INTEGER, "
+                + "FOREIGN KEY("+KEY_EXPENSE_ID+") REFERENCES " + TABLE_EXPENSES +"("+KEY_EXPENSE_ID+"), "
+                + "FOREIGN KEY("+KEY_METHOD_ID+") REFERENCES " + TABLE_PAYMENT_METHODS +"("+KEY_METHOD_ID+"));";
+
         db.execSQL(createUserTable);
         db.execSQL(createReportsTable);
+        db.execSQL(createReceiptImagesTable);
+        db.execSQL(createPaymentTypesTable);
+        db.execSQL(createExpensesTable);
+        db.execSQL(createPaymentMethodsTable);
+        db.execSQL(createExpenseCategoriesTable);
+
+        db.execSQL(createReceiptExpenseLinksTable);
+        db.execSQL(createExpenseCategoryLinksTable);
+        db.execSQL(createReportExpenseLinks);
+        db.execSQL(createPaymentTypeMethodLinks);
+        db.execSQL(createExpenseMethodsLinksTable);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
