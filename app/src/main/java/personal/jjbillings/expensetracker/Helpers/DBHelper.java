@@ -18,6 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "Expense_DB";
 
+    //Tables
     public static final String TABLE_USERS = "users";
     public static final String TABLE_REPORTS = "reports";
     public static final String TABLE_RECEIPT_IMAGES = "receipt_images";
@@ -56,6 +57,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //Expenses table
     public static final String KEY_EXPENSE_ID = "expense_id";
     public static final String KEY_DATE = "date";
+    public static final String KEY_AMOUNT = "amount";
 
     ////payment types table
     public static final String KEY_PAYMENT_TYPE_ID = "payment_type_id";
@@ -94,7 +96,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         String createReceiptImagesTable = "CREATE TABLE " + TABLE_RECEIPT_IMAGES + "("
                 + KEY_RECEIPT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + KEY_PATH + " TEXT, " + KEY_FILENAME + " TEXT);";
+                + KEY_PATH + " TEXT, " + KEY_FILENAME + " TEXT, "
+                + KEY_DATE + " TEXT);";
 
         String createPaymentTypesTable = "CREATE TABLE " + TABLE_PAYMENT_TYPES + "("
                 + KEY_PAYMENT_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -104,6 +107,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + KEY_EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + KEY_USER_ID + " INTEGER, " + KEY_NAME + " TEXT, "
                 + KEY_DESCRIPTION + " TEXT, " + KEY_DATE + " TEXT, "
+                + KEY_AMOUNT + " REAL, "
                 + "FOREIGN KEY("+KEY_USER_ID+") REFERENCES " + TABLE_USERS + "("+KEY_USER_ID+"));";
 
         String createPaymentMethodsTable = "CREATE TABLE " + TABLE_PAYMENT_METHODS + "("
@@ -157,8 +161,19 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECEIPT_IMAGES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PAYMENT_METHODS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PAYMENT_TYPES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSE_CATEGORIES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORTS);
 
-        // Create tables again
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSE_CATEGORY_LINKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSE_METHOD_LINKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECEIPT_EXPENSE_LINKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORT_EXPENSE_LINKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PAYMENT_TYPE_METHOD_LINKS);
+                // Create tables again
         onCreate(db);
     }
 
@@ -256,8 +271,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     // Getting User Count
-    public int getUsersCount() {
-        String countQuery = "SELECT * FROM " + TABLE_USERS;
+    public int getEntryCount(String tableName) {
+        String countQuery = "SELECT * FROM " + tableName;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         int count = cursor.getCount();

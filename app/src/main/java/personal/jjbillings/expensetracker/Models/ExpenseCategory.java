@@ -1,14 +1,14 @@
 package personal.jjbillings.expensetracker.Models;
 
 /**
- * Created by jbillz on 8/25/16.
+ * Created by jbillz on 9/8/16.
  */
-public class PaymentType {
+public class ExpenseCategory {
 
     private int id;
     private String name, description;
 
-    private PaymentType(Builder b) {
+    private ExpenseCategory(Builder b) {
         this.id = b.id;
         this.name = b.name;
         this.description = b.description;
@@ -26,12 +26,13 @@ public class PaymentType {
         return description;
     }
 
-    private static class Builder {
+    public static class Builder {
         private final int id;
         private final String name;
+
         private String description;
 
-        public Builder(int id, String name) {
+        public Builder(int id, String name){
             this.id = id;
             this.name = name;
         }
@@ -41,19 +42,8 @@ public class PaymentType {
             return this;
         }
 
-        public PaymentType build() {
-            return new PaymentType(this);
+        public ExpenseCategory build() {
+            return new ExpenseCategory(this);
         }
     }
 }
-/* keep for default table creation...
-public enum PaymentType {
-     CREDIT_CARD,
-     DEBIT_CARD,
-     ACCOUNT_BALANCE,
-     PAYPAL,
-     VENMO,
-     CASH,
-     GIFT_CARD;
-};
-*/

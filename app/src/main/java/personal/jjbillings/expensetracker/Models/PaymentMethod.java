@@ -6,6 +6,7 @@ package personal.jjbillings.expensetracker.Models;
 public class PaymentMethod {
 
     private PaymentType paymentType;
+    private int id;
     private String name;
     private String description;
     private double amountAvailable;
@@ -15,6 +16,7 @@ public class PaymentMethod {
         this.name = builder.name;
         this.description = builder.description;
         this.amountAvailable = builder.amountAvailable;
+        this.id = builder.id;
     }
 
 
@@ -25,14 +27,16 @@ public class PaymentMethod {
         //Required
         private final PaymentType paymentType;
         private final String name;
+        private final int id;
 
         //Optional
         private String description;
         private double amountAvailable;
 
-        public Builder(PaymentType pt, String nm) {
+        public Builder(PaymentType pt, String nm, int id) {
             this.paymentType = pt;
             this.name = nm;
+            this.id = id;
         }
 
         public Builder description(String desc) {
@@ -80,5 +84,9 @@ public class PaymentMethod {
 
     public void setAmountAvailable(double amountAvailable) {
         this.amountAvailable = amountAvailable;
+    }
+
+    public int getId() {
+        return id;
     }
 }

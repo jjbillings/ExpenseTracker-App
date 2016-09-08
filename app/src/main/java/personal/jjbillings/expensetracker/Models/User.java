@@ -3,14 +3,16 @@ package personal.jjbillings.expensetracker.Models;
 import java.util.List;
 
 /**
+ * TODO: Refactor constructor/possibly into builder.
  * Created by jbillz on 8/22/16.
  */
 public class User {
 
-    private String username;
-    private String password;
+    private String username, password;
+    private int id;
     private List<Expense> expenses;
     private List<PaymentMethod> paymentMethods;
+    private List<Report> reports;
 
     public User() {
 

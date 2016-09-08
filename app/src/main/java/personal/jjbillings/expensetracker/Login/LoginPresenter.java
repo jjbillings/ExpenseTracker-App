@@ -1,7 +1,5 @@
 package personal.jjbillings.expensetracker.Login;
 
-import android.util.Log;
-
 import personal.jjbillings.expensetracker.BasePresenter;
 import personal.jjbillings.expensetracker.Helpers.DBHelper;
 import personal.jjbillings.expensetracker.Models.User;
@@ -16,11 +14,11 @@ public class LoginPresenter extends BasePresenter<LoginView>{
     private int loginAttempt;
 
     //private LoginView loginView;
-    private DBHelper mDBHelper;
+    private DBHelper dbh;
 
 
     public LoginPresenter(DBHelper dbHelper) {
-        this.mDBHelper = dbHelper;
+        this.dbh = dbHelper;
         loginAttempt = 0;
     }
 
@@ -77,17 +75,17 @@ public class LoginPresenter extends BasePresenter<LoginView>{
             return;
         }
 
-        mDBHelper.addUser(newUser);
+        dbh.addUser(newUser);
         getView().showConfirmationForRegistration();
     }
 
     private boolean doesUserExist(User user) {
 
-        if(mDBHelper.getUsersCount() < 1) {
+        if(dbh.getEntryCount(dbh.TABLE_USERS) < 1) {
             return false;
         }
 
-        if(!mDBHelper.getAllUsers().contains(user)) {
+        if(!dbh.getAllUsers().contains(user)) {
             return false;
         }
 
@@ -95,7 +93,7 @@ public class LoginPresenter extends BasePresenter<LoginView>{
     }
 
     private boolean usernamePasswordMatch(User user) {
-        String password = mDBHelper.getPassword(user);
+        String password = dbh.getPassword(user);
 
         if(user.getPassword().equals(password)) {
             return true;

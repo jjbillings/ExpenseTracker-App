@@ -64,7 +64,7 @@ public class DBHelperTest {
     public void checkIfAddUserCorrectly() {
         User testUser = new User("jbillz","password");
         dbh.addUser(testUser);
-        assertEquals(1,dbh.getUsersCount());
+        assertEquals(1,dbh.getEntryCount(dbh.TABLE_USERS));
         assertEquals(testUser,dbh.getUser(testUser.getUsername()));
         assertEquals(testUser.getPassword(),dbh.getPassword(testUser));
     }
@@ -82,7 +82,7 @@ public class DBHelperTest {
 
         dbh.updateUser(testUser);
 
-        assertEquals(1,dbh.getUsersCount());
+        assertEquals(1,dbh.getEntryCount(dbh.TABLE_USERS));
         assertEquals(pass2,dbh.getPassword(testUser));
         assertEquals(testUser,dbh.getUser(testUser.getUsername()));
     }
@@ -94,11 +94,11 @@ public class DBHelperTest {
         User testUser = new User(uname,pass);
         dbh.addUser(testUser);
 
-        assertEquals(1,dbh.getUsersCount());
+        assertEquals(1,dbh.getEntryCount(dbh.TABLE_USERS));
 
         dbh.deleteUser(testUser);
 
-        assertEquals(0,dbh.getUsersCount());
+        assertEquals(0,dbh.getEntryCount(dbh.TABLE_USERS));
     }
 
     @Test
@@ -125,6 +125,6 @@ public class DBHelperTest {
         dbh.addUser(testUser);
         dbh.addUser(testUser);
 
-        assertEquals(1,dbh.getUsersCount());
+        assertEquals(1,dbh.getEntryCount(dbh.TABLE_USERS));
     }
 }
