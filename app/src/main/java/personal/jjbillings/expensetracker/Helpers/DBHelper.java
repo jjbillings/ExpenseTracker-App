@@ -79,8 +79,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         String createUserTable = "CREATE TABLE " + TABLE_USERS + "("
-                + KEY_NAME + " TEXT PRIMARY KEY, "
-                + KEY_PASS + " TEXT);";
+                + KEY_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_NAME + " TEXT, " + KEY_PASS + " TEXT);";
 
         String createReportsTable = "CREATE TABLE " + TABLE_REPORTS + "("
                 + KEY_REPORT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -199,8 +199,13 @@ public class DBHelper extends SQLiteOpenHelper {
      */
 
     // Adding new user
+    /*
     public void addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        if(getUser(user.getUsername()) != null) {
+            return;
+        }
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, user.getUsername());
@@ -210,18 +215,56 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert(TABLE_USERS, null, values);
         db.close(); // Closing database connection
     }
+    */
+
+    public User addUser(String username, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        if(getUser(username) != null) {
+            return getUser(username);
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, username);
+        values.put(KEY_PASS, password);
+
+        // Inserting Row
+        db.insert(TABLE_USERS, null, values);
+
+        User newuser = getUser(username);
+        db.close(); // Closing database connection
+
+        return newuser;
+    }
 
     //TODO: What if the user DNE?
     public User getUser(String uname) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_USERS, new String[] {KEY_NAME, KEY_PASS}, KEY_NAME + " = '"
+        Cursor cursor = db.query(TABLE_USERS, new String[] {KEY_USER_ID, KEY_NAME, KEY_PASS}, KEY_NAME + " = '"
                 + uname + "'",null,null,null,null);
         if(cursor != null) {
             cursor.moveToFirst();
         }
 
-        User user = new User(cursor.getString(0),cursor.getString(1));
+        if(cursor.getCount() <= 0) {
+            return null;
+        }
+
+        User user = new User(cursor.getInt(0),cursor.getString(1), cursor.getString(2));
+        return user;
+    }
+
+    public User getUser(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_USERS, new String[] {KEY_USER_ID, KEY_NAME, KEY_PASS},
+                KEY_USER_ID + " = '" + String.valueOf(id) + "'",null,null,null,null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        User user = new User(cursor.getInt(0),cursor.getString(1),cursor.getString(2));
         return user;
     }
 
@@ -229,7 +272,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<User>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_USERS;
+        String selectQuery = "SELECT * FROM " + TABLE_USERS;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -238,8 +281,9 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 User user = new User();
-                user.setUsername(cursor.getString(0));
-                user.setPassword(cursor.getString(1));
+                user.setId(cursor.getInt(0));
+                user.setUsername(cursor.getString(1));
+                user.setPassword(cursor.getString(2));
                 // Adding user to list
                 userList.add(user);
             } while (cursor.moveToNext());
@@ -254,11 +298,13 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_NAME, user.getUsername());
         values.put(KEY_PASS, user.getPassword());
 
         // updating row
-        return db.update(TABLE_USERS, values, KEY_NAME + " = ?",
-                new String[] { user.getUsername() });
+        //TODO: Find user by id, not username.
+        return db.update(TABLE_USERS, values, KEY_USER_ID + " = ?",
+                new String[] { String.valueOf(user.getId()) });
     }
 
     // Deleting single User
@@ -285,8 +331,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public String getPassword(User user) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_USERS, new String[] {KEY_PASS}, KEY_NAME + " = '"
-                + user.getUsername() + "'",null,null,null,null);
+        Cursor cursor = db.query(TABLE_USERS, new String[] {KEY_PASS}, KEY_USER_ID + " = '"
+                + user.getId() + "'",null,null,null,null);
         if(cursor != null) {
             cursor.moveToFirst();
         }

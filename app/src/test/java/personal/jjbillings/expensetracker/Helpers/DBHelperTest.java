@@ -60,13 +60,25 @@ public class DBHelperTest {
         assertTrue(dbh.doesTableExist(dbh.TABLE_EXPENSE_CATEGORY_LINKS));
     }
 
+    /*
     @Test
     public void checkIfAddUserCorrectly() {
+
         User testUser = new User("jbillz","password");
         dbh.addUser(testUser);
         assertEquals(1,dbh.getEntryCount(dbh.TABLE_USERS));
         assertEquals(testUser,dbh.getUser(testUser.getUsername()));
         assertEquals(testUser.getPassword(),dbh.getPassword(testUser));
+    }
+    */
+
+    @Test
+    public void checkIfAddUserCorrectly() {
+        User testUser = dbh.addUser("jdollhair","password");
+        assertEquals(1,dbh.getEntryCount(dbh.TABLE_USERS));
+        assertEquals(testUser,dbh.getUser("jdollhair"));
+        assertEquals(testUser, dbh.getUser(1));
+        assertEquals("password",dbh.getPassword(testUser));
     }
 
     @Test
@@ -75,8 +87,7 @@ public class DBHelperTest {
         String pass1 = "password";
         String pass2 = "newpassword";
 
-        User testUser = new User(uname1,pass1);
-        dbh.addUser(testUser);
+        User testUser = dbh.addUser(uname1, pass1);
 
         testUser.setPassword(pass2);
 
@@ -91,8 +102,7 @@ public class DBHelperTest {
     public void checkIfDeleteUserCorrectly() {
         String uname = "jdollar";
         String pass = "password";
-        User testUser = new User(uname,pass);
-        dbh.addUser(testUser);
+        User testUser = dbh.addUser(uname,pass);
 
         assertEquals(1,dbh.getEntryCount(dbh.TABLE_USERS));
 
@@ -104,13 +114,9 @@ public class DBHelperTest {
     @Test
     public void checkIfGetAllUsersCorrectly() {
         List<User> testUsers = new ArrayList<>();
-        User u1 = new User("jbillz","pass1");
-        User u2 = new User("jdollar","pass2");
-        testUsers.add(u1);
-        testUsers.add(u2);
 
-        dbh.addUser(u1);
-        dbh.addUser(u2);
+        testUsers.add(dbh.addUser("jbillz","pass1"));
+        testUsers.add(dbh.addUser("jdollar","pass2"));
 
         List<User> dbUsers = dbh.getAllUsers();
 
@@ -120,11 +126,15 @@ public class DBHelperTest {
 
     @Test
     public void checkNotDoubleAddingUsers() {
-        User testUser = new User("jbillz","password");
+        String uname = "jbillz";
+        String pass = "password";
 
-        dbh.addUser(testUser);
-        dbh.addUser(testUser);
+        User testUser1 = dbh.addUser(uname,pass);
+        User testUser2 = dbh.addUser(uname,pass);
 
         assertEquals(1,dbh.getEntryCount(dbh.TABLE_USERS));
+        assertNotNull(testUser1);
+        assertNotNull(testUser2);
+        assertEquals(testUser1,testUser2);
     }
 }

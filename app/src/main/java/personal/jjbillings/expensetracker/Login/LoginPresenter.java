@@ -50,15 +50,13 @@ public class LoginPresenter extends BasePresenter<LoginView>{
             return;
         }
 
-        User attemptingUser = new User(username,password);
-
-        if(!doesUserExist(attemptingUser)) {
+        if(!doesUserExist(username)) {
             getView().showErrorMessageForUserNamePassword();
             incrementLoginAttempt();
             return;
         }
 
-        if(usernamePasswordMatch(attemptingUser)) {
+        if(usernamePasswordMatch(username, password)) {
             getView().login();
             return;
         }
@@ -69,33 +67,32 @@ public class LoginPresenter extends BasePresenter<LoginView>{
 
     public void doRegisterUser(String username, String password) {
 
-        User newUser = new User(username,password);
-        if(doesUserExist(newUser)) {
+        if(doesUserExist(username)) {
             getView().showErrorMessageIfUsernameTaken();
             return;
         }
 
-        dbh.addUser(newUser);
+        User newUser = dbh.addUser(username,password);
         getView().showConfirmationForRegistration();
     }
 
-    private boolean doesUserExist(User user) {
+    private boolean doesUserExist(String username) {
 
         if(dbh.getEntryCount(dbh.TABLE_USERS) < 1) {
             return false;
         }
 
-        if(!dbh.getAllUsers().contains(user)) {
+        if(dbh.getUser(username) == null) {
             return false;
         }
 
         return true;
     }
 
-    private boolean usernamePasswordMatch(User user) {
-        String password = dbh.getPassword(user);
+    private boolean usernamePasswordMatch(String username, String incomingPassword) {
+        User storedUser = dbh.getUser(username);
 
-        if(user.getPassword().equals(password)) {
+        if(storedUser.getPassword().equals(incomingPassword)) {
             return true;
         }
 

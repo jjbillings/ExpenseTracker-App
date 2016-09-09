@@ -23,6 +23,12 @@ public class User {
         this.setPassword(password);
     }
 
+    public User(int id, String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.id = id;
+    }
+
     public User(String username, String password, List<Expense> expenses, List<PaymentMethod> paymentMethods) {
         this.username = username;
         this.password = password;
@@ -79,5 +85,21 @@ public class User {
 
     public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
         this.paymentMethods = paymentMethods;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
     }
 }
